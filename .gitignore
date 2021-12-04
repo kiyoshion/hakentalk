@@ -83,7 +83,7 @@ dist
 # Service worker
 sw.*
 
-.firebase
+.firebase/
 .firebaserc
 firebase.json
 firestore.indexes.json
