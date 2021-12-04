@@ -1,0 +1,188 @@
+<template>
+    <div class="container">
+        <h2>ログイン</h2>
+        <div v-if="!isAuthenticated" class="flex flex--space-between">
+            <div class="flex__container">
+                <h3 class="center">匿名ログイン</h3>
+                <div class="formGroup formGroup--full">
+                    <label for="name">ニックネーム(8文字以内)</label>
+                    <input type="text" name="name" v-model="inputName">
+                </div>
+                <div class="formGroup center">
+                    <button class="button button--round button--yellow" @click="login">匿名ではじめる</button>
+                </div>
+            </div>
+            <div class="flex__container">
+                <h3 class="center">認証ログイン</h3>
+                    <!-- <div id="firebaseui-auth-container"></div> -->
+                    <button class="" @click="googleLogin">Googleでログイン</button>
+                
+            </div>
+        </div>
+        <div v-else>
+            <h3>お疲れ様です。{{ $store.state.user.userName }}さん。</h3>
+            <button class="button button--round" @click="logout">ログアウト</button>
+        </div>
+        <div class="links">
+            <nuxt-link v-if="!isAuthenticated" to="/guide#aboutUser" class="small">匿名ユーザーってなに？</nuxt-link>
+        </div>
+    </div>
+</template>
+
+<script>
+import firebase from '@/plugins/firebase.js'
+import 'firebase/firestore'
+import { mapActions, mapState, mapGetters } from 'vuex'
+import Profile from '~/components/Profile.vue'
+import axios from 'axios'
+import Meta from '~/assets/mixins/meta'
+
+export default {
+    mixins: [Meta],
+    fetch ({store}) {
+        store.commit('resetModal')
+        store.commit('resetModalProfile')
+    },
+    data() {
+        return {
+            inputName: '',
+            isModal: false,
+            uiConfig: {},
+            meta: {
+                title: 'ログイン',
+                description: '派遣会議のログインはこちら。',
+                type: 'article',
+                url: 'https://hakentalk.com/login'
+            }
+        }
+    },
+    components: {
+        Profile
+    },
+    computed: {
+        ...mapState(['user']),
+        ...mapGetters(['isAuthenticated']),
+    },
+    mounted() {
+        // const firebaseui = require('firebaseui')
+        // require('firebaseui/dist/firebaseui.css')
+        // var uiConfig = {
+            // callbacks: {
+            //     signInSuccess: function(currentUser) {
+            //         firebase.firestore().collection('users').doc(currentUser.uid).set({
+            //             userName: currentUser.displayName,
+            //             email: currentUser.email,
+            //             photoURL: currentUser.photoURL,
+            //             providerId: currentUser.providerId,
+            //             createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            //         })
+            //     return true;
+            //     },
+            // },
+            // signInFlow: 'redirect',
+            // signInSuccessUrl: '/',
+        //     signInOptions: [
+        //         firebase.auth.GoogleAuthProvider.PROVIDER_ID
+        //     ]
+        // }
+        // var ui = firebaseui.auth.AuthUI.getInstance()
+        // if (!ui) {
+        //     ui = new firebaseui.auth.AuthUI(firebase.auth())
+        // }
+        // var ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());
+        // var ui = new firebaseui.auth.AuthUI(firebase.auth())
+        // ui.start("#firebaseui-auth-container", uiConfig);
+    },
+    updated() {
+    },
+    methods: {
+        ...mapActions(['setUser']),
+        login() {
+            if(!this.inputName) {
+                alert('ニックネームを入力してください。')
+            } else {
+                firebase.auth().signInAnonymously()
+                .then(result => {
+                    let str = this.inputName.substring(0, 8)
+                    this.setUser({
+                        userId: result.user.uid,
+                        userName: str,
+                        verified: false
+                    })
+                    // this.$store.commit('toggleModalProfile')
+                    this.inputName = this.$store.state.user.userName
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            }
+        },
+        googleLogin() {
+            firebase.auth().signInWithRedirect(new firebase.auth.GoogleAuthProvider())
+            .then(result => {
+                firebase.firestore().collection('users').doc(result.user.uid).set({
+                    userName: result.user.displayName,
+                    photoURL: result.user.photoURL,
+                    providerId: result.user.providerId,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                })
+                console.log('user'+result.user)
+                this.setUser({
+                    userId: result.user.uid,
+                    userName: result.user.displayName,
+                    providerId: result.user.providerId,
+                    photoURL: result.user.photoURL,
+                })
+                    // this.$store.commit('toggleModalProfile')
+                    // this.inputName = this.$store.state.user.userName
+                    this.$router.push('/')
+            }).catch((err) => {
+                console.log(err)
+            })
+        },
+        logout() {
+            firebase.auth().signOut()
+            .then(() => {
+                this.setUser(null)
+            }).catch((err) => {
+                alert(err)
+            })
+        },
+        setUserCommit(user) {
+            this.setUser({
+                userId: user.uid,
+                userName: user.displayName.substring(0, 8),
+                photoURL: user.photoURL,
+                provider: user.providerData
+            })
+        }
+    }
+}
+</script>
+
+
+<style lang="scss" scoped>
+.container {
+    min-height: 50vh;
+}
+
+.button {
+    margin-top: 1rem;
+}
+
+.flex {
+    &__container {
+        background-color: #fff;
+        border-radius: .5rem;
+        width: 48%;
+        margin: 1rem auto;
+        padding: 2rem;
+    }
+    @media screen and ( max-width: 500px ) {
+        flex-wrap: wrap;
+        &__container {
+            width: 100%;
+        }
+    }
+}
+</style>

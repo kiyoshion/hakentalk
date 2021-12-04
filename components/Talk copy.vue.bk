@@ -1,0 +1,125 @@
+<template>
+    <div :class="{ 'talk talk--full talk--nohover': isTalksId }">
+        <div v-if="isTalksId" class="backLink">
+            <nuxt-link :to="{ name: 'area-id', params: { id: talk.area }}">←</nuxt-link>
+        </div>
+        <nuxt-link v-if="isAreaId || isIndex" :to="{name: 'talks-id', params: {id: talk.id}}" class="talk__link"></nuxt-link>
+        <div v-if="talk.photoURL" class="talk__userPhoto">
+            <img :src="talk.photoURL" alt="" width="50">
+        </div>
+        <div v-else class="talk__userPhoto">
+            <img src="/img/avatar.svg" alt="" width="50">
+        </div>
+        <div class="talk__meta">
+            <div v-if="talk.displayName" class="talk__userName">{{ talk.displayName }} <span v-if="isTalksId" class="message_userId" v-html="formatUserId(talk.authorId)"></span></div>
+            <div v-else class="talk__userName">ゲスト <span v-if="isTalksId" class="message_userId" v-html="formatUserId(talk.authorId)"></span></div>
+            <div class="talk__createdAt">
+                <span v-html="formatDateFull(talk.createdAt.toDate())"></span>
+            </div>
+            <div v-if="isTalksId" class="talk__area" v-html="checkSubArea(talk.subArea)">
+            </div>
+            <div v-if="isAreaId" class="talk__area" v-html="checkSubAreaForArchive(talk.subArea)">
+            </div>
+            <div v-if="isIndex" class="talk__area" v-html="printAreaName(talk.area, talk.subArea)">               
+            </div>
+            <div class="talk__status">
+                <span :class="status" v-html="checkTalkStatus(talk.createdAt.toDate())"></span>
+            </div>
+        </div>
+        <div class="talk__body">
+            <h2 class="talk__ttl">{{ talk.title }}</h2>
+            <p class="talk__description">{{ talk.description }}</p>
+        </div>
+        <div class="talk__users">
+            <div class="talk__usersPhoto">
+                <div v-for="(user, index) in talk.users" :key="index">
+                    <img v-if="user.photoURL" :src="user.photoURL" alt="" width="30">
+                    <img v-else src="/img/avatar.svg" alt="" width="30">
+                </div>
+            </div>
+            <div class="talk__usersNum" v-html="printUsersNum(talk.users)"></div>
+        </div>
+    </div>
+</template>
+
+<script>
+
+export default {
+    props: ['talk', 'talkId'],
+    data() {
+        return {
+            status: '',
+            isTalksId: false,
+            isAreaId: false,
+            isIndex: false,
+            areaData: [ '北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県', '茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県', '新潟県', '富山県', '石川県', '福井県', '山梨県', '長野県', '岐阜県', '静岡県', '愛知県', '三重県', '滋賀県', '京都府', '大阪府', '兵庫県', '奈良県', '和歌山県', '鳥取県', '島根県', '岡山県', '広島県', '山口県', '徳島県', '香川県', '愛媛県', '高知県', '福岡県', '佐賀県', '長崎県', '熊本県', '大分県', '宮崎県', '鹿児島県', '沖縄県' ],
+        }
+    },
+    computed: {
+    },
+    created() {
+        if (this.$route.name == 'talks-id') {
+            this.isTalksId = true
+        } else if (this.$route.name == 'area-id') {
+            this.isAreaId = true
+        } else if (this.$route.path == '/') {
+            this.isIndex = true
+        }
+    },
+    methods: {
+        printUsersNum(users) {
+            if (typeof users !== 'undefined' && typeof users === 'object' && Object.keys(users).length) {
+                return Object.keys(users).length+'名が参加'
+            } else {
+                return 1+'名が参加'
+            }
+        },
+        formatUserId(id) {
+            let str = new String(id)
+            return '[' + str.substr(0, 6) + ']'
+        },
+        formatDateFull(time) {
+            let date = new Date(time);
+            let mon = ('0' + (date.getMonth() + 1)).slice(-2);
+            let day = ('0' + date.getDate()).slice(-2);
+            let hour = ('0' + date.getHours()).slice(-2);
+            let min = ('0' + date.getMinutes()).slice(-2);
+            return mon + '/' + day + ' ' + hour + ':' + min;
+        },
+        checkSubArea(area) {
+            if ( area == '全域' ) {
+                let result = this.areaData[parseInt(this.talk.area)-1]
+                return result
+            } else {
+                return area
+            }
+        },
+        checkSubAreaForArchive(area) {
+            if ( area == '全域' ) {
+                return this.$store.state.area.areaName
+            } else {
+                return area
+            }
+        },
+        checkTalkStatus(time) {
+            let date = new Date(time)
+            let now = new Date()
+            let limit = new Date(date.setDate(date.getDate() + 3))
+            if(  limit.getTime() > now.getTime() ) {
+                this.status = 'OPEN'
+                return 'OPEN'
+            } else {
+                this.status = 'CLOSE'
+                return 'CLOSE'
+            }
+        },
+        printAreaName(area, sub) {
+        if ( sub == '全域' ) {
+            return this.areaData[area-1]
+        } else {
+            return this.areaData[area-1] + ' ' + sub
+        }
+        },
+    }
+}
+</script>

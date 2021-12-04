@@ -1,0 +1,680 @@
+<template>
+  <div>
+    <div class="hero" style="background-image:url('/img/hakentalk-hero.jpg')">
+      <div class="hero__inner">
+        <div class="hero__ttl">
+          <h1 class="ttl">
+            派遣アルバイトの選び方改革！
+          </h1>
+          <h2 class="subTtl">
+            派遣会議は、派遣アルバイト（日雇い・単発）について語り合う、匿名チャットサービスです。
+          </h2>
+        </div>
+        <div class="hero__talks">
+          <img src="/img/001lite_edit.png" alt="">
+          <!-- <div class="slider" key="div">
+              <div class="slider__inner">
+                <div class="prev" @click="slide('prev')" :disabled="currentPos == 0">←</div>
+                <div class="next" @click="slide('next')" :disabled="currentPos == talks.length - 1">→</div>
+                
+                
+                
+                <div v-for="{ userName, userPhoto, usersNum, title, description, createdAt, area, subArea, id, users, key } in talks" 
+                    :key="key"
+                    class="talk"
+                    >
+                  <nuxt-link :to="{name: 'talks-id', params: {id: id}}" class="talk__link"></nuxt-link>
+                  <div class="talk__userPhoto">
+                    <div v-if="userPhoto">
+                        <img :src="userPhoto" alt="" width="50">
+                    </div>
+                    <div v-else>
+                        <img src="/img/avatar.svg" alt="" width="50">
+                    </div>
+                  </div>
+                  <div class="talk__meta">
+                    <div class="talk__userName">{{ userName }}</div>
+                    <div class="talk__createdAt">
+                        <span v-html="formatDate(createdAt)"></span>
+                    </div>
+                    <div class="talk__status">
+                        <span :class="checkTalkStatus(createdAt)" v-html="checkTalkStatus(createdAt)"></span>
+                    </div>
+                  </div>
+                  <div class="talk__body">
+                    <div class="talk__area" v-html="printAreaName(area, subArea)">
+                    </div>
+                    <h2 class="talk__ttl">{{ title }}</h2>
+                    <p class="talk__description">{{ description }}</p>
+                  </div>
+                  <div class="talk__users">
+                    <div class="talk__usersPhoto">
+                      <div v-for="(user, index) in users" :key="index" v-bind="users">
+                        <div v-if="user.userPhoto">
+                            <img :src="user.userPhoto" alt="" width="30">
+                        </div>
+                        <div v-else>
+                            <img src="/img/avatar.svg" alt="" width="30">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="talk__usersNum">{{ usersNum }}名が参加</div>
+                  </div>
+                </div>
+
+              </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+        <section id="intro">
+        <div class="container">
+        <h2 class="subTtl underline">ただいま、会議中！</h2>
+        <!-- <transition-group tag="div" class="flex flex--column" id="message-list">
+                  <div key="div" class="intro__message">
+        <span class="message__createdAt--big">{{ formatDateFull(m_createdAt) }} UP!</span>
+                    <div class="copy"><span>最近<small>の<br>ひとこと</small></span></div>
+                    <div class="message">
+                    <div class="message__userPhoto">
+                        <div v-if="m_userPhoto">
+                            <img :src="m_userPhoto" alt="" width="50">
+                        </div>
+                        <div v-else>
+                            <img src="/img/avatar.svg" alt="" width="50">
+                        </div>
+                    </div>
+                    <div class="message__meta">
+                        <div class="message__userName">{{ m_userName }}</div>
+                    </div>
+                    <div class="message__content">
+                        <div class="message__body">
+                            <p>{{ m_body }}</p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </transition-group> -->
+            <div class="flex flex--space-between flex--wrap">
+              <div v-for="{ userName, userPhoto, usersNum, title, description, createdAt, area, subArea, id, users, key } in talks" 
+                        :key="key"
+                        class="talk lead lead--half"
+                        >
+                        <div class="copy"><span>会議<small>に<br>参加する</small></span></div>
+                <nuxt-link :to="{name: 'talks-id', params: {id: id}}" class="talk__link"></nuxt-link>
+                <div class="talk__userPhoto">
+                  <div v-if="userPhoto">
+                      <img :src="userPhoto" alt="" width="50">
+                  </div>
+                  <div v-else>
+                      <img src="/img/avatar.svg" alt="" width="50">
+                  </div>
+                </div>
+                <div class="talk__meta">
+                  <div class="talk__userName">{{ userName }}</div>
+                  <div class="talk__createdAt">{{ formatDateFull(createdAt) }}</div>
+                  <div class="talk__area" v-html="printAreaName(area, subArea)">
+                  </div>
+                </div>
+                <div class="talk__body">
+                  <h2 class="talk__ttl">{{ title }}</h2>
+                  <p class="talk__description">{{ description }}</p>
+                </div>
+                <div class="talk__users">
+                  <div class="talk__usersPhoto">
+                    <div v-for="(user, index) in users" :key="index" v-bind="users">
+                      <div v-if="user.userPhoto">
+                          <img :src="user.userPhoto" alt="" width="30">
+                      </div>
+                      <div v-else>
+                          <img src="/img/avatar.svg" alt="" width="30">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="talk__usersNum">{{ usersNum }}名が参加</div>
+                </div>
+              </div>
+            </div>
+            </div>
+      </section>
+
+    
+      <section id="intro">
+        <div class="container">
+          
+        <h2 class="subTtl underline">会議をしよう！</h2>
+        <div class="flex">
+        <div class="lead">
+          <h3>会議室（チャットルーム）は、<span class="underline underline--no-margin">3日後</span>に投稿不可、<span class="underline underline--no-margin">7日後</span>に閲覧不可になります。</h3>
+          <p class="mt-1">派遣アルバイトをしている人なら、だれでも参加できます。匿名で参加できて、跡に残らないから安心。みなさん同じ境遇です。語り忘れないよう、気軽に参加、相談してみましょう。</p>
+          <div class="copy"><span>POINT</span></div>
+        </div>
+        </div>
+
+        
+        <!-- <div class="step flex flex--space-around flex--center">
+          <div class="step__item">
+            <div class="areaButton" @click="$router.push('/area')">
+              <img src="/img/localisation.png" alt="">
+              <span>会議を探す</span>
+            </div>
+          </div>
+          <div >
+            <p>または</p>
+          </div>
+          <div class="step__item">
+            <div class="areaButton" @click="$router.push('/talks')">
+              <img src="/img/chat.png" alt="">
+              <span>会議を開く</span>
+            </div>
+          </div>
+        </div>
+
+        </div>
+      </section> -->
+        
+        <section id="case">
+          <div class="container">
+        <h2 class="subTtl underline">こんなときに便利！</h2>
+        <div class="flex flex--space-between flex--wrap">
+        <div class="lead lead--half">
+          <h3><span class="underline">家チカ</span>で働きたい！</h3>
+          <div class="flex">
+            <p>「〇〇周辺で働きやすい現場はある？」など、地域ごとにチャットができます。派遣会社によって現場はまちまち。他の派遣会社の人に、近所の現場を聞いてみましょう。</p>
+          </div>
+          
+          <div class="copy"><span>CASE<br><big>01</big></span></div>
+        </div>
+
+        <div class="lead lead--half">
+          <h3><span class="underline">ここの現場</span>ってどう？</h3>
+          <div class="flex">
+            <p>初見の現場は不安がつきもの。どんなことするの？そもそも入口どこですか？そんな派遣あるあるも、気軽に質問してみましょう。</p>
+          </div>
+          <div class="copy"><span>CASE<br><big>02</big></span></div>
+        </div>
+
+        
+        <div class="lead lead--half mt-5">
+          <h3>派遣、<span class="underline">退屈</span>なんですけど？</h3>
+          <div class="flex">
+            <p>現場の人と仲良くなるには時間がかかります。そんなときは、趣味の話でもしてみましょう。きっと、同じ趣味の人もいるはずです。</p>
+          </div>
+          <div class="copy"><span>CASE<br><big>03</big></span></div>
+        </div>
+
+        <div class="lead lead--half mt-5">
+          <h3>私の時給、<span class="underline">低すぎ・・</span>？</h3>
+          <div class="flex">
+            <p>同じ現場でも派遣会社によって時給が違ったり、交通費がでたりでなかったり。そんなときは、同じ現場の人にこっそり聞いてみましょう。</p>
+          </div>
+          <div class="copy"><span>CASE<br><big>04</big></span></div>
+        </div>
+
+        </div>
+
+        <div class="step flex flex--space-around flex--center">
+          <div class="step__item">
+            <div class="areaButton" @click="$router.push('/area')">
+              <img src="/img/localisation.png" alt="">
+              <span>会議を探す</span>
+            </div>
+          </div>
+          <div >
+            <p>または</p>
+          </div>
+          <div class="step__item">
+            <div class="areaButton" @click="$router.push('/talks')">
+              <img src="/img/chat.png" alt="">
+              <span>会議を開く</span>
+            </div>
+          </div>
+        </div>
+
+        <transition-group>
+        <div class="modal modal--full modal--area" key="div" v-if="isAreaModal" @click.self="isAreaModal=!isAreaModal">
+          <div class="modal__inner">
+            <areas />
+          </div>
+        </div>
+        </transition-group>
+        </div>
+      </section>
+
+  <section id="recent">
+    <div>
+  
+
+      
+      <!-- <section id="case">
+        <div class="container">
+
+
+        </div>
+
+      </section> -->
+
+
+  <section id="company">
+    <div class="container">
+      <h2 class="subTtl underline">ルールを守ろう！</h2>
+      <div class="lead">
+        <h3>派遣会議は、<span class="underline">みなさんの信頼</span>で出来てます。</h3>
+        <div class="copy"><span>利用規約</span></div>
+        <p>派遣会議は公共の場です。みなさんで気持ちよく使っていただくため、以下にご留意ください。</p>
+        <ol>
+          <li><p>個人情報</p>本人、他人にかかわらず氏名、電話番号、メールアドレス、住所など、個人情報は投稿しないでください。</li>
+          <li><p>誹謗・中傷</p>他人を誹謗、中傷する発言を行うと、法的な責任を問われる可能性があります。</li>
+          <li><p>著作権に触れる情報</p>印刷物やホームページの内容、他人の発言を転載する場合は、あらかじめ著作者の許諾を得てください。</li>
+          <li><p>わいせつな情報</p>公共の場ですので、不適切な表現はご遠慮ください。</li>
+          <li><p>広告や商売に関する情報</p>正規の契約に基づかない広告、個々の商品やサービスの販売はご遠慮ください。</li>
+          <li><p>事実に反すること</p>虚偽の事実や、架空の出来事は投稿しないでください。</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="container">
+      <h2 class="subTtl underline">お知らせ</h2>
+      <ul>
+        <li><a href="#hoge">【機能拡張】ログイン機能を追加しました。</a></li>
+      </ul>
+    </div>
+  </section>
+
+  </div>
+      
+  </section>
+  </div>
+</template>
+
+<script>
+import Profile from '~/components/Profile.vue'
+import Areas from '~/components/Areas.vue'
+import Login from '~/components/Login.vue'
+import firebase from '@/plugins/firebase.js'
+import 'firebase/firestore'
+
+export default {
+  data() {
+    return {
+      talks: [],
+      messages: [],
+      m_talkId: '',
+      m_title: '',
+      m_userName: '',
+      m_body: '',
+      m_userPhoto: '',
+      m_createdAt: '',
+      hotTalk: '',
+      isAreaModal: false,
+      currentPos: 0,
+      transition_name: 'show-next',
+      areaData: [ '北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県', '茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県', '新潟県', '富山県', '石川県', '福井県', '山梨県', '長野県', '岐阜県', '静岡県', '愛知県', '三重県', '滋賀県', '京都府', '大阪府', '兵庫県', '奈良県', '和歌山県', '鳥取県', '島根県', '岡山県', '広島県', '山口県', '徳島県', '香川県', '愛媛県', '高知県', '福岡県', '佐賀県', '長崎県', '熊本県', '大分県', '宮崎県', '鹿児島県', '沖縄県' ],
+    }
+  },
+  components: {
+    Profile,
+    Areas,
+    Login
+  },
+  created() {
+  },
+  mounted() {
+      this.getTalks()
+      this.getMessages()
+  },
+  methods: {
+    getTalks() {
+      const talksRef = firebase.firestore().collection('talks').orderBy('createdAt', 'desc').limit(4);
+      talksRef.onSnapshot(snapshot => {
+          this.talks = [];
+          snapshot.forEach(doc => {
+              let time = ''
+              try {
+                  time = doc.data().createdAt.toDate()
+              }
+              catch(e) {
+                  console.log(e)
+              }
+              let usersNum = 0
+              if (typeof doc.data().users !== 'undefined' && typeof doc.data().users === 'object' && Object.keys(doc.data().users).length) {
+                usersNum = Object.keys(doc.data().users).length
+              } else {
+                usersNum = 1
+              }
+              this.hotTalk = doc.id
+              this.talks.push({
+                  id: doc.id,
+                  userName: doc.data().userName,
+                  title: doc.data().title,
+                  description: doc.data().description,
+                  users: doc.data().users,
+                  usersNum: usersNum,
+                  createdAt: time,
+                  area: doc.data().area,
+                  subArea: doc.data().subArea
+              })
+          })
+      })
+    },
+    getMessages() {
+      const messageRef = firebase.firestore().collection('hotMessage').doc('1');
+      messageRef.onSnapshot(doc => {
+              let time = ''
+              let date = ''
+              try {
+                  time = doc.data().createdAt.toDate()
+                  date = this.formatDateMonth(doc.data().createdAt.toDate())
+              }
+              catch(e) {
+                  console.log(e)
+              }
+              this.m_talkId = doc.data().id
+              this.m_title = doc.data().title
+              this.m_userName = doc.data().userName
+              this.m_body = doc.data().body
+              this.m_createdAt = time
+              this.m_userPhoto = doc.data().userPhoto
+          })
+    },
+    formatDate(time) {
+        let date = new Date(time);
+        let mon = ('0' + (date.getMonth() + 1)).slice(-2);
+        let day = ('0' + date.getDate()).slice(-2);
+        let hour = ('0' + date.getHours()).slice(-2);
+        let min = ('0' + date.getMinutes()).slice(-2);
+        return mon + '/' + day + ' ' + hour + ':' + min;
+    },
+    formatDateMonth(time) {
+        let date = new Date(time);
+        let mon = ('0' + (date.getMonth() + 1)).slice(-2);
+        let day = ('0' + date.getDate()).slice(-2);
+        return mon + '/' + day;
+    },
+    formatDateFull(time) {
+        let date = new Date(time);
+        let mon = ('0' + (date.getMonth() + 1)).slice(-2);
+        let day = ('0' + date.getDate()).slice(-2);
+        let hour = ('0' + date.getHours()).slice(-2);
+        let min = ('0' + date.getMinutes()).slice(-2);
+        return mon + '/' + day + ' ' + hour + ':' + min;
+    },
+    checkTalkStatus(time) {
+        let date = new Date(time)
+        let now = new Date()
+        let limit = new Date(date.setDate(date.getDate() + 3))
+        if(  limit.getTime() > now.getTime() ) {
+            this.status = 'OPEN'
+            return 'OPEN'
+        } else {
+            this.status = 'CLOSE'
+            return 'CLOSE'
+        }
+    },
+    printAreaName(area, sub) {
+      if ( sub == '全域' ) {
+        return this.areaData[area-1]
+      } else {
+        return this.areaData[area-1] + ' ' + sub
+      }
+    },
+    slide(el) {
+      if ( el == 'prev') {
+        this.transition_name = 'show-prev';
+        this.currentPos--;
+      } else {
+        this.transition_name = 'show-next';
+        this.currentPos++;
+      }
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+
+ol {
+  margin: 1rem 0;
+  padding-left: 1rem;
+  li {
+    margin-bottom: .5rem;
+  }
+}
+
+section {
+  margin: 2rem auto;
+}
+
+.modal--area {
+  .modal__inner {
+    height: 90%;
+    &> div {
+      overflow-y: scroll;
+    }
+  }
+}
+
+.step {
+  width: 40%;
+  margin: 1rem auto 0;
+  h4 {
+    text-align: center;
+  }
+  @media screen and ( max-width: 500px) {
+    width: 100%;
+  }
+}
+
+.lead {
+  position: relative;
+  background-color: #fff;
+  border: 2px solid;
+  border-radius: .5rem;
+  padding: 2rem 3rem 2rem 2rem;
+  margin: 3rem 0;
+  &--half {
+    width: 45%;
+  }
+  h3 {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+  @media screen and ( max-width: 500px ) {
+    margin: 2rem 0;
+    padding: 2rem 1rem;
+    &--half {
+      width: 100%;
+    }
+    h3 {
+      font-size: 1rem;
+      margin: 0 0 .5rem;
+      line-height: 1;
+    }
+  }
+}
+
+.copy {
+  position: absolute;
+  background-color: #fff000;
+  border: 2px solid;
+  border-radius: 50%;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  padding: 1rem;
+  text-align: center;
+  transform: translate(50%, -50%);
+  span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    line-height: 1.25;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  @media screen and ( max-width: 769px ) {
+    top: -1rem;
+    right: 3rem;
+    width: 80px;
+    height: 80px;
+    span {
+      font-size: .8rem;
+    }
+  }
+}
+
+.intro__message {
+  position: relative;
+  width: 100%;
+  border: 2px solid;
+  border-radius: .5rem;
+  // margin: 3rem auto;
+  margin-top: 2rem;
+  padding: 2rem;
+  background: #fff;
+  transition: all .2s;
+  // &:hover {
+  //   filter: drop-shadow(1px 2px 4px rgba(0,0,0,.5));
+  // }
+  a {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 11;
+  }
+  .subTtl {
+    margin-left: 60px;
+  }
+  .message {
+    margin: 1rem 0 0;
+    &__content {
+      margin-left: 60px;
+    }
+    &__body {
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 0;
+      max-width: 80%;
+      margin-left: 0;
+      filter: none;
+      // filter: drop-shadow(1px 2px 4px rgba(0, 0, 0, .1));
+    }
+    &__meta {
+      justify-content: flex-start;
+      align-items: center;
+    }
+    &__userName {
+      font-weight: 700;
+    }
+    &__createdAt {
+      font-weight: 700;
+    }
+  }
+  @media screen and ( max-width: 500px ) {
+    width: 100%;
+    padding: 1rem;
+    .subTtl {
+      margin-left: 0;
+    }
+    .message {
+      &__userPhoto {
+        margin-right: 10px;
+      }
+      &__meta {
+        margin-left: 0;
+      }
+      &__content {
+        margin-left: 30px;
+      }
+      &__body {
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+.message__createdAt--big {
+  position: absolute;
+  top: -1.5rem;
+  background: #fff000;
+  // border-radius: .5rem;
+  // border: 2px solid;
+  padding: .5rem 1rem;
+  font-size: 1rem;
+  margin-left: 1rem;
+  letter-spacing: .05rem;
+  @media screen and ( max-width: 500px ) {
+    font-size: .8rem;
+  }
+}
+
+.areaButton {
+  display: inline-block;
+  background: #fff;
+  border: 2px solid;
+  border-radius: .5rem;
+  padding: 1rem;
+  text-align: center;
+  &:hover {
+    cursor: pointer;
+  }
+  img {
+    display: block;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto .5rem;
+    object-fit: contain;
+  }
+  span {
+    display: inline-block;
+  }
+}
+
+.talk {
+  &__area {
+    top: 2.25rem;
+    right: 4.5rem;
+  }
+  @media screen and ( max-width: 500px ) {
+    padding: 2rem 1rem 1rem;
+    &__meta {
+      margin-bottom: 20px;
+    }
+    &__area {
+      top: 2.25rem;
+      right: 1.5rem;
+    }
+  }
+}
+
+
+.show-next-enter-active, .show-next-leave-active,
+.show-prev-enter-active, .show-prev-leave-active  {
+  transition: all .4s;
+}
+.show-next-enter, .show-prev-leave-to {
+  transform: translateX(640px);
+}
+.show-next-leave-to, .show-prev-enter {
+  transform: translateX(-640px);
+}
+
+.v-enter-active,
+.v-leave-active {
+    transition: opacity .2s, transform .2s;
+}
+.v-enter,
+.v-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+</style>

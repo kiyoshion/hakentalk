@@ -1,0 +1,714 @@
+<template>
+  <div>
+    <div class="hero" style="">
+      <div class="hero__inner">
+        <div class="hero__ttl">
+          <img src="/img/hakentalk-hero-ttl.svg">
+        </div>
+        <div class="hero__talks">
+          <img src="/img/hakentalk-hero-mockup-500x850.png" alt="">
+        </div>
+      </div>
+    </div>
+
+    <section id="case">
+      <div class="container center">
+        <h2 class="subTtl underline">こんなときに便利！</h2>
+        <div>
+          <no-ssr>
+            <carousel
+              v-if="showCarousel"
+              :per-page="1"
+              :autoplay="true"
+              :autoplayTimeout=4000
+              :loop="true"
+              paginationColor="#aaa"
+              >
+              <slide>
+                <div class="lead lead__carousel">
+                  <div class="lead__img">
+                    <img src="/img/hakentalk-case-near.svg" width="200" alt="">
+                  </div>
+                  <h3><span class="underline">家チカ</span>で働きたい！</h3>
+                  <div class="lead__txt">
+                    <p>派遣会社によって紹介先はまちまち。他の派遣会社の人に、「〇〇周辺で働きやすい職場はある？」といった質問をしてみましょう。</p>
+                  </div>
+                </div>
+              </slide>
+              <slide>
+                <div class="lead lead__carousel">
+                  <div class="lead__img">
+                    <img src="/img/hakentalk-case-where.svg" width="200" alt="">
+                  </div>
+                  <h3><span class="underline">ここの職場</span>ってどう？</h3>
+                  <div class="lead__txt">
+                    <p>初見の職場は不安がつきもの。どんなことするの？そもそも入口どこですか？そんな派遣あるあるも、気軽に質問してみましょう。</p>
+                  </div>
+              </div>
+              </slide>
+              <slide>
+                <div class="lead lead__carousel">
+                  <div class="lead__img">
+                    <img src="/img/hakentalk-case-ohmygod.svg" width="200" alt="">
+                  </div>
+                  <h3>うわっ・・<span class="underline">私の時給、低すぎ・・</span>？</h3>
+                  <div class="lead__txt">
+                    <p>同じ職場でも派遣会社によって時給が違ったり、交通費がでたりでなかったり。そんなときは、同じ職場の人にこっそり聞きましょう。</p>
+                  </div>
+                </div>
+              </slide>
+              <slide>
+                <div class="lead lead__carousel">
+                  <div class="lead__img">
+                    <img src="/img/hakentalk-case-lonely.svg" width="200" alt="">
+                  </div>
+                  <h3>派遣って<span class="underline">孤独なんですけど</span>？</h3>
+                  <div class="lead__txt">
+                    <p>職場の人と仲良くなるには時間がかかります。そんなときは、趣味の話でもしてみましょう。きっと、同じ趣味の人もいるはずです。</p>
+                  </div>
+                </div>
+              </slide>
+            </carousel>
+          </no-ssr>
+        </div>
+      </div>
+    </section>
+
+    <section id="intro">
+      <div class="container container--full">
+        <div class="center">
+          <h2 class="subTtl underline">会議をしよう！</h2>
+        </div>
+        <div class="flex flex--column">
+          <!-- <div class="lead">
+            <h3>会議室（チャットルーム）は、<span class="underline underline--no-margin">3日後</span>に投稿不可、<span class="underline underline--no-margin">7日後</span>に閲覧不可になります。</h3>
+            <p class="mt-1">派遣アルバイトをしている人なら、だれでも参加できます。匿名で参加できて、跡に残らないから安心。みなさん同じ境遇です。語り忘れのないよう、お気軽にご参加ください。</p>
+            <div class="copy small"><span><small class="small">インスタントに<br>派遣するなら</small></span></div>
+          </div> 
+          
+          <div class="lead">
+            <h3>グループは、<span class="underline underline--no-margin">最後の一言</span>だけ残ります。</h3>
+            <p class="mt-1">認証ログインすることでグループに参加することができます。グループは派遣会社ごと、職場ごとに作成可能です。「いつもの職場、明日だれくるの？」</p>
+            <div class="copy small"><span><small class="small">コンスタントに<br>派遣するなら</small></span></div>
+          </div>-->
+          <div class="flex flex--center intro__container">
+            <div class="intro__img">
+              <img src="/img/hakentalk-hero-mockup-500x850.png" style="width:100%;" alt="">
+            </div>
+            <div class="intro__txt">
+              <h2>会議室（チャットルーム）は、<span class="underline underline--no-margin">3日後</span>に投稿不可、<span class="underline underline--no-margin">7日後</span>に閲覧不可になります。</h2>
+              <p class="mt-1">派遣をしている人なら、だれでも参加できます。匿名で参加できて、あとに残らないから安心。語り忘れのないよう、気軽にご参加ください。</p>
+            </div>
+          </div>
+          <div class="flex flex--center intro__container">
+            <div class="intro__img">
+              <img src="/img/hakentalk-hero-mockup-500x850.png" style="width:100%;" alt="">
+            </div>
+            <div class="intro__txt">
+              <h2>グループでは、<span class="underline underline--no-margin">最後の発言だけ</span>残ります。</h2>
+              <p class="mt-1">グループは派遣会社ごと、職場ごとに作成可能です。認証ログインすることでグループに参加できます。「いつもの職場、明日だれくるの？」</p>
+            </div>
+          </div>
+        </div>
+        <div class="container step flex flex--space-between flex--center">
+          <div class="step__item">
+            <div class="areaButton" @click="$router.push('/area')">
+              <img src="/img/icon-japan.svg" alt="">
+              <span>会議を探す</span>
+            </div>
+          </div>
+          <div class="step__item">
+            <div class="areaButton" @click="$router.push('/talks')">
+              <img src="/img/icon-chat-border.svg" alt="">
+              <span>会議を開く</span>
+            </div>
+          </div>
+          <div class="step__item">
+            <div class="areaButton" @click="$router.push('/guide')">
+              <img src="/img/icon-guide.svg" alt="">
+              <span>使い方</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="recent">
+      <div class="container">
+        <div class="center">
+          <h2 class="subTtl underline">ただいま、会議中！</h2>
+        </div>
+        <div class="flex flex--space-between flex--wrap mt-3">
+          
+          <!-- <div v-for="{ displayName, photoURL, usersNum, title, description, createdAt, area, subArea, id, users, key } in talks" 
+                    :key="key"
+                    > -->
+          <div v-for="(talk, index) in talks" 
+                    :key="index"
+                    class="talk"
+                    >
+                    <talk :talk="talk" />
+            <!-- <nuxt-link :to="{name: 'talks-id', params: {id: id}}" class="talk__link"></nuxt-link>
+            <div class="talk__userPhoto">
+              <img v-if="photoURL" :src="photoURL" alt="" width="50">
+              <img v-else src="/img/avatar.svg" alt="" width="50">
+            </div>
+            <div class="talk__meta">
+              <div v-if="displayName" class="talk__userName">{{ displayName }}</div>
+              <div v-else class="talk__userName">ゲスト</div>
+              <div class="talk__createdAt">{{ formatDateFull(createdAt) }}</div>
+              <div class="talk__area" v-html="printAreaName(area, subArea)"></div>
+              <div class="talk__status">
+                  <span :class="checkTalkStatus(createdAt)" v-html="checkTalkStatus(createdAt)"></span>
+              </div>
+            </div>
+            <div class="talk__body">
+              <h2 class="talk__ttl">{{ title }}</h2>
+              <p class="talk__description">{{ description }}</p>
+            </div>
+            <div class="talk__users">
+              <div class="talk__usersPhoto">
+                <div v-for="(user, index) in users" :key="index" v-bind="users">
+                  <img v-if="user.photoURL" :src="user.photoURL" alt="" width="30">
+                  <img v-else src="/img/avatar.svg" alt="" width="30">
+                </div>
+              </div>
+              <div class="talk__usersNum">{{ usersNum }}名が参加</div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="center">
+        <button class="button button--round button--yellow" @click="$router.push('/area')">もっと見る</button>
+      </div>
+    </section>
+
+  <section id="rule">
+    <div class="container">
+      <div class="center">
+        <h2 class="subTtl underline">ルールを守ろう！</h2>
+      </div>
+      <div class="lead">
+        <h3>派遣会議は、<span class="underline">みなさんの信頼</span>で成り立っています。</h3>
+        <!-- <div class="copy"><span>ルール</span></div> -->
+        <p>派遣会議は公共の場です。みなさんで気持ちよく使っていただくため、以下の投稿はご遠慮ください。</p>
+        <ol>
+          <li>公序良俗に反する投稿</li>
+          <li>犯罪的行為、またはそれらに結びつく投稿</li>
+          <li>第三者の知的所有権（著作権・意匠権・特許権・実用新案権・商標権・ノウハウが含まれるがこれに限定されない）を侵害する投稿</li>
+          <li>第三者の財産、信用、プライバシーを侵害する投稿</li>
+          <li>第三者に不利益を与える投稿</li>
+          <li>第三者を誹謗中傷する投稿</li>
+          <li>当サイトの運営を妨げる、または、当方の信用を毀損する投稿</li>
+          <li>その他、法律に反する投稿</li>
+          <li>本サイトの利用者として有する権利を第三者に転売、再販売、譲渡、若しくはこれに類する投稿</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="container">
+      <div class="center">
+        <h2 class="subTtl underline">お知らせ</h2>
+      </div>
+      <ul class="news">
+        <li class="news__item" v-for="(data, index) in news" :key="index">
+          <nuxt-link class="news__link" :to="{name: 'news-id', params: {id: data.id}}">
+            <span class="news__tag">{{ data.tag }}</span>
+            <span class="news__createdAt">{{ formatDateYear(data.createdAt) }}</span>
+            <span class="news__title">{{ data.title }}</span>
+          </nuxt-link>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  </div>
+</template>
+
+<script>
+import Profile from '~/components/Profile.vue'
+import Areas from '~/components/Areas.vue'
+import Login from '~/components/Login.vue'
+import Talk from '~/components/Talk.vue'
+import firebase from '@/plugins/firebase.js'
+import 'firebase/firestore'
+import Carousel from 'vue-carousel/src/Carousel.vue'
+import Slide from 'vue-carousel/src/Slide.vue'
+import Meta from '~/assets/mixins/meta'
+import { mapActions, mapState, mapGetters } from 'vuex'
+
+export default {
+  mixins: [Meta],
+  fetch ({store}) {
+      store.commit('resetModal')
+      store.commit('resetModalProfile')
+  },
+  data() {
+    return {
+      talks: [],
+      messages: [],
+      news: [],
+      m_talkId: '',
+      m_title: '',
+      m_displayName: '',
+      m_body: '',
+      m_userPhoto: '',
+      m_createdAt: '',
+      hotTalk: '',
+      isAreaModal: false,
+      currentPos: 0,
+      transition_name: 'show-next',
+      showCarousel: false,
+      areaData: [ '北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県', '茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県', '新潟県', '富山県', '石川県', '福井県', '山梨県', '長野県', '岐阜県', '静岡県', '愛知県', '三重県', '滋賀県', '京都府', '大阪府', '兵庫県', '奈良県', '和歌山県', '鳥取県', '島根県', '岡山県', '広島県', '山口県', '徳島県', '香川県', '愛媛県', '高知県', '福岡県', '佐賀県', '長崎県', '熊本県', '大分県', '宮崎県', '鹿児島県', '沖縄県' ],
+      titleTemplate: null,
+      meta: {
+          title: '派遣アルバイトの匿名チャットサービス',
+          description: '派遣会議は、派遣アルバイトについて語り合う、匿名チャットサービスです。',
+          type: 'website',
+          url: 'https://hakentalk.com'
+      }
+    }
+  },
+  components: {
+    Profile,
+    Areas,
+    Login,
+    Carousel,
+    Slide,
+    Talk
+  },
+  computed: {
+    ...mapState(['user']),
+    ...mapGetters(['isLogin']),
+  },
+  created() {
+  },
+  mounted() {
+    this.showCarousel = true
+    this.getTalks()
+    this.getNews()
+  },
+  methods: {
+    ...mapActions(['setUser']),
+    getTalks() {
+      const talksRef = firebase.firestore().collection('talks').orderBy('createdAt', 'desc').limit(4);
+      talksRef.onSnapshot(snapshot => {
+          this.talks = [];
+          snapshot.forEach(doc => {
+              let time = ''
+              try {
+                  time = doc.data().createdAt.toDate()
+              }
+              catch(e) {
+                  console.log(e)
+              }
+              let usersNum = 0
+              if (typeof doc.data().users !== 'undefined' && typeof doc.data().users === 'object' && Object.keys(doc.data().users).length) {
+                usersNum = Object.keys(doc.data().users).length
+              } else {
+                usersNum = 1
+              }
+              this.hotTalk = doc.id
+              this.talks.push({
+                  id: doc.id,
+                  displayName: doc.data().displayName,
+                  photoURL: doc.data().photoURL,
+                  title: doc.data().title,
+                  description: doc.data().description,
+                  users: doc.data().users,
+                  // usersNum: usersNum,
+                  createdAt: doc.data().createdAt,
+                  area: doc.data().area,
+                  subArea: doc.data().subArea
+              })
+          })
+      })
+    },
+    getMessages() {
+      const messageRef = firebase.firestore().collection('hotMessage').doc('1');
+      messageRef.onSnapshot(doc => {
+              let time = ''
+              let date = ''
+              try {
+                  time = doc.data().createdAt.toDate()
+                  date = this.formatDateMonth(doc.data().createdAt.toDate())
+              }
+              catch(e) {
+                  console.log(e)
+              }
+              this.m_talkId = doc.data().id
+              this.m_title = doc.data().title
+              this.m_displayName = doc.data().displayName
+              this.m_body = doc.data().body
+              this.m_createdAt = time
+              this.m_userPhoto = doc.data().userPhoto
+          })
+    },
+    formatDate(time) {
+        let date = new Date(time);
+        let mon = ('0' + (date.getMonth() + 1)).slice(-2);
+        let day = ('0' + date.getDate()).slice(-2);
+        let hour = ('0' + date.getHours()).slice(-2);
+        let min = ('0' + date.getMinutes()).slice(-2);
+        return mon + '/' + day + ' ' + hour + ':' + min;
+    },
+    formatDateMonth(time) {
+        let date = new Date(time);
+        let mon = ('0' + (date.getMonth() + 1)).slice(-2);
+        let day = ('0' + date.getDate()).slice(-2);
+        return mon + '/' + day;
+    },
+    formatDateFull(time) {
+        let date = new Date(time);
+        let mon = ('0' + (date.getMonth() + 1)).slice(-2);
+        let day = ('0' + date.getDate()).slice(-2);
+        let hour = ('0' + date.getHours()).slice(-2);
+        let min = ('0' + date.getMinutes()).slice(-2);
+        return mon + '/' + day + ' ' + hour + ':' + min;
+    },
+    checkTalkStatus(time) {
+        let date = new Date(time)
+        let now = new Date()
+        let limit = new Date(date.setDate(date.getDate() + 3))
+        if(  limit.getTime() > now.getTime() ) {
+            this.status = 'OPEN'
+            return 'OPEN'
+        } else {
+            this.status = 'CLOSE'
+            return 'CLOSE'
+        }
+    },
+    printAreaName(area, sub) {
+      if ( sub == '全域' ) {
+        return this.areaData[area-1]
+      } else {
+        return this.areaData[area-1] + ' ' + sub
+      }
+    },
+    slide(el) {
+      if ( el == 'prev') {
+        this.transition_name = 'show-prev';
+        this.currentPos--;
+      } else {
+        this.transition_name = 'show-next';
+        this.currentPos++;
+      }
+    },
+    getNews() {
+        fetch('https://hakentalk.microcms.io/api/v1/news?limit=5,isPublished[equals]true', {
+            headers: { 'X-API-KEY': '54e791d8-f599-40af-95e3-1f08ff537ec4' }
+            })
+            .then(res => res.json())
+            .then(result => {
+              for (let i = 0; i < result.contents.length; i++) {
+                this.news.push(result.contents[i])
+              }
+            });
+    },
+    formatDateYear(time) {
+        let date = new Date(time);
+        let year = (date.getFullYear())
+        let mon = ('0' + (date.getMonth() + 1)).slice(-2);
+        let day = ('0' + date.getDate()).slice(-2);
+        return year + '/' + mon + '/' + day;
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+ol {
+  margin: 1rem 0;
+  padding-left: 1rem;
+  li {
+    margin-bottom: .5rem;
+  }
+}
+
+section {
+  padding: 3rem 0;
+  &#case,
+  &#recent,
+  &#news {
+    background-color: #fff;
+  }
+  &#intro {
+    background-color: #F1F7FC;
+  }
+  @media screen and ( max-width: 500px ) {
+    padding: 1rem 0;
+  }
+}
+
+.modal--area {
+  .modal__inner {
+    height: 90%;
+    &> div {
+      overflow-y: scroll;
+    }
+  }
+}
+
+.hero {
+  background: rgb(235,239,248);
+  background: linear-gradient(133deg, rgba(235,239,248,1) 0%, rgba(255,255,255,1) 100%);
+  &__ttl {
+    width: 50%;
+    h2 {
+      font-size: 1.25rem;
+    }
+  }
+  @media screen and ( max-width: 769px ) {
+    &__ttl {
+      width: 100%;
+      img {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.intro {
+  &__container {
+    flex-wrap: nowrap;
+    &:first-child {
+      flex-direction: row-reverse;
+    }
+  }
+  &__txt {
+    width: 40%;
+  }
+  &__img {
+    width: 40%;
+    img {
+      width: 100%;
+    }
+  }
+  @media screen and ( max-width: 769px ) {
+    &__container {
+      flex-wrap: wrap;
+      &:first-child {
+        flex-direction: row;
+      }
+    }
+    &__txt {
+      width: 100%;
+    }
+    &__img {
+      width: 100%;
+    }
+  }
+}
+
+.intro__message {
+  position: relative;
+  width: 100%;
+  border: 2px solid;
+  border-radius: .5rem;
+  margin-top: 2rem;
+  padding: 2rem;
+  background: #fff;
+  transition: all .2s;
+  a {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 11;
+  }
+  .subTtl {
+    margin-left: 60px;
+  }
+  .message {
+    margin: 1rem 0 0;
+    &__content {
+      margin-left: 60px;
+    }
+    &__body {
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 0;
+      max-width: 80%;
+      margin-left: 0;
+      filter: none;
+    }
+    &__meta {
+      justify-content: flex-start;
+      align-items: center;
+    }
+    &__userName {
+      font-weight: 700;
+    }
+    &__createdAt {
+      font-weight: 700;
+    }
+  }
+  @media screen and ( max-width: 500px ) {
+    width: 100%;
+    padding: 1rem;
+    .subTtl {
+      margin-left: 0;
+    }
+    .message {
+      &__userPhoto {
+        margin-right: 10px;
+      }
+      &__meta {
+        margin-left: 0;
+      }
+      &__content {
+        margin-left: 30px;
+      }
+      &__body {
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+.message__createdAt--big {
+  position: absolute;
+  top: -1.5rem;
+  background: #fff000;
+  padding: .5rem 1rem;
+  font-size: 1rem;
+  margin-left: 1rem;
+  letter-spacing: .05rem;
+  @media screen and ( max-width: 500px ) {
+    font-size: .8rem;
+  }
+}
+
+.areaButton {
+  display: inline-block;
+  background: #fff;
+  // border: 2px solid;
+  border-radius: .5rem;
+  width: 100%;
+  padding: 2rem 5rem;
+  filter: drop-shadow(1px 5px 10px rgba(0, 0, 0, .1));
+  transition: filter .2s;
+  text-align: center;
+  &:hover {
+    cursor: pointer;
+    filter: drop-shadow(1px 5px 10px rgba(0, 0, 0, .2));
+  }
+  img {
+    display: block;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto .5rem;
+    object-fit: contain;
+  }
+  span {
+    display: inline-block;
+  }
+  @media screen and ( max-width: 769px ) {
+    padding: 1rem 3rem;
+    span {
+      font-size: .6rem;
+    }
+  }
+  @media screen and ( max-width: 500px ) {
+    width: 100%;
+    font-size: .6rem;
+    padding: 1rem;
+  }
+}
+
+.lead {
+  &__carousel {
+    width: 75%;
+    margin: 5rem auto 3rem;
+    img {
+      margin-bottom: 1rem;
+    }
+  }
+  &__txt {
+    width: 75%;
+    text-align: left;
+    margin: 0 auto;
+    &--left {
+      text-align: left;
+    }
+  }
+  @media screen and ( max-width: 500px ) {
+    &__carousel {
+      width: 90%;
+      margin: 2rem auto 1rem;
+      img {
+        width: 150px;
+      }
+    }
+    &__txt {
+      width: 100%;
+      text-align: justify;
+      &--left {
+        text-align: left;
+      }
+    }
+  }
+}
+
+.VueCarousel-navigation {
+  .VueCarousel-navigation-button {
+    font-size: 2rem!important;
+  }  
+}
+
+.VueCarousel-pagination {
+  .VueCarousel-dot-container {
+    margin-top: 0!important;
+  }
+}
+
+button.VueCarousel-dot {
+  outline-style: none;
+  outline-width: 0;
+  outline: none;
+  &:focus {
+    outline-style: none;
+    outline-width: 0;
+    outline: none;
+  }
+}
+
+.VueCarousel {
+  margin: 0 auto 2rem;
+}
+
+@media screen and ( max-width: 500px ) {
+  .VueCarousel-navigation-prev {
+    left: 2rem;
+  }
+  .VueCarousel-navigation-next {
+    right: 2rem;
+  }
+}
+
+.show-next-enter-active, .show-next-leave-active,
+.show-prev-enter-active, .show-prev-leave-active  {
+  transition: all .4s;
+}
+.show-next-enter, .show-prev-leave-to {
+  transform: translateX(640px);
+}
+.show-next-leave-to, .show-prev-enter {
+  transform: translateX(-640px);
+}
+
+.v-enter-active,
+.v-leave-active {
+    transition: opacity .2s, transform .2s;
+}
+.v-enter,
+.v-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+</style>

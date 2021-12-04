@@ -1,0 +1,267 @@
+<template>
+    <div>
+        <div v-if="!isLogin">
+            <nuxt-link to="/login" class="button button--round button--yellow">ログイン</nuxt-link>
+        </div>
+        <div v-else>
+        <div class="userProfile" @click="$store.commit('toggleModalProfile')">
+            <img v-if="$store.state.user.photoURL" :src="$store.state.user.photoURL" alt="" width="30">
+            <img v-else src="/img/avatar.svg" alt="" width="30">
+        </div>
+        <transition-group tag="div">
+        <div v-if="$store.state.isModalProfileActive" class="modal" id="profileModal" key="div">
+            <div class="modal__inner modal__inner--right">
+                <!-- <button class="button button__editProfile" @click="toggleFormEditProfile">編集</button> -->
+                <div class="user__photoURL center">
+                    <img v-if="$store.state.user.photoURL" :src="$store.state.user.photoURL" alt="" width="40">
+                    <img v-else src="/img/avatar.svg" alt="" width="40">
+                </div>
+                <div class="user__displayName center">
+                    <p v-if="$store.state.user.displayName" class="displayName">{{ $store.state.user.displayName }}</p>
+                    <p v-else class="displayName">ゲスト</p>
+                </div>
+                <transition-group>
+                <div v-if="isLogin && !$store.state.user.isAnonymous" class="form__editProfile" key="div">
+                    <div class="formGroup">
+                        <label for="name">ニックネーム(8文字以内)</label>
+                        <input type="text" name="name" v-model="inputName">
+                    </div> 
+                    <!-- <div class="formGroup center">
+                        <button class="button button--white" @click="saveProfileForAnonymous">更新</button>
+                    </div> -->
+                    <div class="formGroup center">
+                        <!-- <button class="button center" @click="$store.commit('toggleModalProfile')">キャンセル</button> -->
+                        <button class="button button--white" @click="saveProfile">更新</button>
+                    </div>
+                </div>
+                </transition-group>
+                <div v-if="isLogin && !$store.state.user.isAnonymous" class="button__logout center">
+                    <button class="button" @click="logout">ログアウト</button>
+                </div>
+                <div v-else class="button__logout center">
+                    <button class="button" @click="logoutForAnonymous">ログアウト</button>
+                    <!-- <button class="button button--yellow" @click="$router.push('/login')">認証してログイン</button> -->
+                </div>
+                <!-- <div v-else class="formGroup formGroup--buttons">
+                    <button class="button button--round center" @click="$store.commit('toggleModalProfile')">キャンセル</button>
+                    <button class="button button--round button--yellow" @click="login">匿名ではじめる</button>
+                </div>
+                <div>
+                    <div id="firebaseui-auth-container" @click="googleLogin"></div>
+                </div>
+                <nuxt-link v-if="!isLogin" to="/faq#aboutUser" class="small">匿名ユーザーってなに？</nuxt-link> -->
+            </div>
+        </div>
+        </transition-group>
+        </div>
+    </div>
+</template>
+
+<script>
+import firebase from '@/plugins/firebase.js'
+import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
+import 'firebase/firestore'
+import Prefs from '~/components/Prefs.vue'
+
+export default {
+    data() {
+        return {
+            inputName: '',
+            inputCompany: '',
+            photoURL: '',
+            selectedArea: 0,
+            pickedGender: '',
+            editProfileModal: false,
+            isShow: false
+        }
+    },
+    components: {
+        Prefs
+    },
+    computed: {
+        ...mapState(['user']),
+        ...mapGetters(['isLogin']),
+    },
+    created() {
+    },
+    mounted() {
+        const firebaseui = require('firebaseui-ja')
+        require('firebaseui-ja/dist/firebaseui.css')
+        firebase.auth().onAuthStateChanged(user => {
+            if (!user || this.$store.state.user.isAnonymous) {
+                const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth())
+                const config = {
+                    signInOptions: [
+                        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                        firebase.auth.FacebookAuthProvider.PROVIDER_ID
+                    ],
+                    callbacks: {
+                        // Nuxtのローカルサーバーで起こるCORSエラーのためこのように設定。本番環境では不要
+                        signInSuccessWithAuthResult: (authResult) => {
+                        window.location.href = "/"
+                        return false 
+                        }
+                    },
+                    signInSuccessUrl: '/',
+                    // signInFlow: 'popup', // ログインフロー設定。Nuxtのローカルサーバーで起こるCORSエラーがあるのでpopupがオススメです。
+                    tosUrl: 'https://hakentalk.com/term',
+                    privacyPolicyUrl: 'https://hakentalk.com/privacy'
+                }
+                try{
+                    ui.start('#firebaseui-auth-container', config)
+                }
+                catch(e) {
+                    console.log(e)
+                }
+            }
+        })
+        if (this.isLogin) {
+            this.setUserData()
+        }
+    },
+    methods: {
+        ...mapActions(['setUser']),
+        ...mapActions(['logout']),
+        ...mapActions(['logoutForAnonymous']),
+        createSelectArea() {
+            let el = document.getElementById('area');
+            for (let i=0; i<this.area.length; i++) {
+                let op = document.createElement('option');
+                op.value = this.area[i].id;
+                op.text = this.area[i].name;
+                el.appendChild(op);
+            }
+        },
+        toggleModal() {
+            if (this.isLogin) {
+                this.setUserData()
+            }
+            this.editProfileModal = !this.editProfileModal
+        },
+        saveProfileForAnonymous() {
+            if (!this.inputName) {
+                alert('ニックネームを入力してください。')
+            } else {
+                let str = this.inputName.substring(0, 8)
+                var user = firebase.auth().currentUser
+                user.updateProfile({
+                    displayName: str
+                }).catch(function(error) {
+                    console.log(error)
+                })
+                this.setUser(user)
+                this.$store.commit('toggleModalProfile')
+                this.inputName = this.$store.state.user.displayName
+            }
+        },
+        saveProfile() {
+            if (!this.inputName) {
+                alert('ニックネームを入力してください。')
+            } else {
+                let str = this.inputName.substring(0, 8)
+                var user = firebase.auth().currentUser
+                user.updateProfile({
+                    displayName: str
+                }).catch(function(error) {
+                    console.log(error)
+                })
+                this.setUser(user)
+                this.$store.commit('toggleModalProfile')
+                this.inputName = this.$store.state.user.displayName
+            }
+        },
+        setUserData() {
+            this.inputName = this.$store.state.user.displayName
+        },
+        toggleFormEditProfile() {
+            this.isShow = !this.isShow
+        },
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.userProfile {
+    img {
+        border-radius: 50%;
+        width: 30px;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.firebaseui-idp-list {
+    flex-direction: column;
+}
+
+.modal {
+    position: relative;
+    &__inner {
+        width: 400px;
+        filter: drop-shadow(0px 5px 10px rgba(0, 0, 0, .25));
+        &--right {
+            top: 20px;
+            right: 0;
+        }
+    }
+    @media screen and ( max-width: 500px) {
+        &__inner {
+            width: 300px;
+            &--right {
+                top: 20px;
+                right: 0;
+            }
+        }        
+    }
+}
+
+.user {
+    &__photoURL {
+        img {
+            border-radius: 50%;
+        }
+        .photoURL {
+            border-radius: 50%;
+        }
+    }
+    &__displayName {
+        margin-bottom: 1rem;
+    }
+}
+
+.form__editProfile {
+    display: flex;
+    align-items: flex-end;
+    .formGroup {
+        width: 100px;
+        &:first-child {
+            width: 60%;
+        }
+    }
+}
+
+.button {
+    &__logout {
+        margin-top: 1rem;
+        .button {
+            filter: none;
+        }
+    }
+    &__editProfile {
+        position: absolute;
+        top: 40px;
+        right: 20px;
+    }
+}
+
+.v-enter-active,
+.v-leave-active {
+    transition: opacity .2s, transform .2s;
+}
+.v-enter,
+.v-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
+}
+</style>
